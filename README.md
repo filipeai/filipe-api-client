@@ -98,6 +98,84 @@ api.notifications.getNotification('notification-id')
   });
 ```
 
+
+### Working with Notification Handlers
+
+#### Create a notification handler
+
+```js
+const handlerData = {
+  source_service: 'billing',
+  metadata_filter: { invoiceType: { operator: 'eq', value: 'premium' } },
+  prompt: 'Summarize this invoice notification'
+};
+
+api.notificationHandlers.createHandler(handlerData)
+  .then(response => {
+    console.log('Handler created:', response);
+  })
+  .catch(err => {
+    console.error('Error creating handler:', err.message);
+  });
+```
+
+#### Get notification handlers with filtering
+
+```js
+api.notificationHandlers.getHandlers({ 
+  source_service: 'billing', 
+  limit: 10
+})
+  .then(handlerList => {
+    console.log('Notification handlers:', handlerList.handlers);
+  })
+  .catch(err => {
+    console.error('Error fetching handlers:', err.message);
+  });
+```
+
+#### Get a notification handler by ID
+
+```js
+api.notificationHandlers.getHandler('handler-id')
+  .then(handler => {
+    console.log('Handler:', handler);
+  })
+  .catch(err => {
+    console.error('Error fetching handler:', err.message);
+  });
+```
+
+#### Update a notification handler
+
+```js
+const updateData = {
+  source_service: 'billing',
+  metadata_filter: { invoiceType: { operator: 'eq', value: 'enterprise' } },
+  prompt: 'Create a detailed summary of this enterprise invoice notification'
+};
+
+api.notificationHandlers.updateHandler('handler-id', updateData)
+  .then(updatedHandler => {
+    console.log('Handler updated:', updatedHandler);
+  })
+  .catch(err => {
+    console.error('Error updating handler:', err.message);
+  });
+```
+
+#### Delete a notification handler
+
+```js
+api.notificationHandlers.deleteHandler('handler-id')
+  .then(() => {
+    console.log('Handler deleted successfully');
+  })
+  .catch(err => {
+    console.error('Error deleting handler:', err.message);
+  });
+```
+
 ### Real-time Updates (Optional WebSocket Support)
 
 Connect to a WebSocket channel for real-time updates:
