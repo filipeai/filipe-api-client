@@ -1,0 +1,40 @@
+{
+  "name": "@filipeai/client",
+  "version": "0.0.1",
+  "description": "Node.js client library for Filipe API",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "echo \"Publishing package to GitHub Packages...\"",
+    "publish": "pnpm publish --registry=https://npm.pkg.github.com"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "keywords": [
+    "api",
+    "client",
+    "notifications"
+  ],
+  "author": "Luis Filipe <luis@filipe.xyz>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filipeai/filipe-api-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/filipeai/filipe-api-client/issues"
+  },
+  "homepage": "https://github.com/filipeai/filipe-api-client#readme",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "ws": "^8.18.1"
+  }
+}
