@@ -1,6 +1,6 @@
 {
   "name": "@filipeai/client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js client library for Filipe API",
   "main": "lib/index.js",
   "scripts": {
@@ -15,7 +15,8 @@
   "keywords": [
     "api",
     "client",
-    "notifications"
+    "notifications",
+    "websocket"
   ],
   "author": "Luis Filipe <luis@filipe.xyz>",
   "license": "MIT",

@@ -176,20 +176,91 @@ api.notificationHandlers.deleteHandler('handler-id')
   });
 ```
 
-### Real-time Updates (Optional WebSocket Support)
+### WebSocket Notification System
 
-Connect to a WebSocket channel for real-time updates:
+Connect to the WebSocket notification system for real-time updates:
 
 ```js
-const socket = api.connectWebSocket('updates');
-
-socket.on('message', (data) => {
-  console.log('Received real-time update:', JSON.parse(data));
-});
-
-// Close the connection when done
-// socket.close();
+// Connect to the WebSocket notification system
+api.websocket.connect({
+  autoReconnect: true,          // Automatically reconnect on disconnect
+  reconnectInterval: 3000,      // Reconnect attempt interval in ms
+  maxReconnectAttempts: 5       // Maximum number of reconnect attempts
+})
+  .then(socket => {
+    console.log('Connected to the notification system');
+    
+    // Subscribe to specific notification sources
+    api.websocket.subscribe('email_service');
+    api.websocket.subscribe('billing');
+    
+    // Handle different types of messages
+    api.websocket.on('message', (data) => {
+      switch (data.type) {
+        case 'notification':
+          console.log('New notification received:', data);
+          
+          // Acknowledge receipt
+          api.notifications.acknowledgeNotification(data.notification_id, socket);
+          break;
+          
+        case 'processing_result':
+          console.log('Processing completed:', data);
+          break;
+          
+        case 'processing_error':
+          console.error('Processing failed:', data);
+          break;
+          
+        case 'system':
+          console.log('System message:', data.message);
+          break;
+      }
+    });
+    
+    // Handle connection events
+    api.websocket.on('close', () => {
+      console.log('Disconnected from notification system');
+    });
+    
+    api.websocket.on('error', (error) => {
+      console.error('WebSocket error:', error);
+    });
+    
+    // To disconnect when done
+    // api.websocket.disconnect();
+  })
+  .catch(err => {
+    console.error('WebSocket connection error:', err.message);
+  });
 ```
+
+#### WebSocket Authentication
+
+The WebSocket connection uses your API key for authentication. The same API key used to initialize the client is used for the WebSocket connection.
+
+#### WebSocket Methods
+
+- `api.websocket.connect(options)` - Connect to the WebSocket server
+- `api.websocket.subscribe(sourceService)` - Subscribe to a notification source
+- `api.websocket.unsubscribe(sourceService)` - Unsubscribe from a notification source
+- `api.websocket.on(event, handler)` - Add an event handler
+- `api.websocket.off(event, handler)` - Remove an event handler
+- `api.websocket.disconnect()` - Close the WebSocket connection
+
+#### WebSocket Events
+
+- `open` - Connection is established
+- `message` - Message received from the server
+- `close` - Connection is closed
+- `error` - Connection error occurred
+
+#### Message Types
+
+- `system` - System messages (connection, subscription confirmation)
+- `notification` - New notification messages
+- `processing_result` - Notification processing result messages
+- `processing_error` - Notification processing error messages
 
 ## Error Handling
 
