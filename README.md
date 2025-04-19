@@ -4,12 +4,16 @@ A Node.js client library for the Filipe API.
 
 ## Installation
 
-Since this package is private and hosted on GitHub Packages, you'll need to configure npm/pnpm to use GitHub Packages for the @filipeai scope:
-
-1. Install the package:
+Install the package:
 
 ```
 pnpm add @filipeai/client
+```
+
+Or with npm:
+
+```
+npm install @filipeai/client
 ```
 
 ## Usage
