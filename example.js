@@ -93,6 +93,59 @@ setTimeout(() => {
     });
 }, 1000);
 
+// Example 10: Creating or updating an identity
+const identityPayload = {
+  source_service: 'email_service',
+  source_id: 'john.doe@example.com',
+  name: 'John Doe',
+  metadata: {
+    department: 'Engineering',
+    title: 'Senior Developer',
+    location: 'San Francisco'
+  }
+};
+
+let createdIdentityId;
+api.identities.createOrUpdateIdentity(identityPayload)
+  .then(response => {
+    console.log('Identity created/updated:', response);
+    createdIdentityId = response.id;
+    
+    // Example 11: Fetching the identity by unified ID
+    return api.identities.getIdentity(createdIdentityId);
+  })
+  .then(identity => {
+    console.log('Fetched identity by ID:', identity);
+    
+    // Example 12: Fetching the identity by source service and source ID
+    return api.identities.getIdentityBySource(
+      identityPayload.source_service, 
+      identityPayload.source_id
+    );
+  })
+  .then(identity => {
+    console.log('Fetched identity by source:', identity);
+    
+    // We won't delete the identity in this example to keep it for notifications
+  })
+  .catch(err => {
+    console.error('Error with identity operations:', err.message);
+  });
+
+// Example 13: Retrieving identities with filtering
+setTimeout(() => {
+  api.identities.getIdentities({ 
+    name: 'John',
+    limit: 10 
+  })
+    .then(identityList => {
+      console.log('Identities:', identityList.identities);
+    })
+    .catch(err => {
+      console.error('Error fetching identities:', err.message);
+    });
+}, 2000);
+
 // Example 9: Using WebSockets for real-time notifications
 (async () => {
   try {
@@ -152,3 +205,38 @@ setTimeout(() => {
     console.error('WebSocket connection error:', err.message);
   }
 })();
+
+// Example 14: Creating a notification with identity integration
+setTimeout(() => {
+  // Create a notification for a user that has an identity
+  const notificationWithIdentity = {
+    source_service: 'email_service',
+    sender_id: 'john.doe@example.com', // This should match the identity source_id
+    content: 'Notification with identity integration',
+    metadata: { 
+      test: true,
+      timestamp: Date.now()
+    }
+  };
+  
+  api.notifications.createNotification(notificationWithIdentity)
+    .then(response => {
+      console.log('Notification with identity created:', response);
+      
+      // Fetch the notification to check if identity was linked
+      return api.notifications.getNotification(response.id);
+    })
+    .then(notification => {
+      console.log('Notification with identity details:', notification);
+      
+      // The notification should include identity information
+      if (notification.identity) {
+        console.log('Identity integration successful!', notification.identity);
+      } else {
+        console.log('Identity information not present in notification');
+      }
+    })
+    .catch(err => {
+      console.error('Error with identity integration test:', err.message);
+    });
+}, 3000);

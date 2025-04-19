@@ -1,10 +1,14 @@
 {
   "name": "@filipeai/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node.js client library for Filipe API",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
+    "test:unit": "mocha 'test/**/*.test.js' --grep 'Integration' --invert",
+    "test:integration": "mocha 'test/integration.test.js'",
+    "test:coverage": "nyc --reporter=lcov --reporter=text mocha",
+    "test:real-api": "node test/real-api.test.js",
     "prepublishOnly": "echo \"Publishing package to GitHub Packages...\""
   },
   "publishConfig": {
@@ -36,5 +40,12 @@
   "dependencies": {
     "axios": "^1.8.4",
     "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.3.0",
+    "nock": "^13.5.4",
+    "nyc": "^15.1.0",
+    "sinon": "^17.0.1"
   }
 }

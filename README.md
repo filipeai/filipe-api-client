@@ -176,6 +176,113 @@ api.notificationHandlers.deleteHandler('handler-id')
   });
 ```
 
+### Working with Identities
+
+Identities allow you to map and unify user identities across different services.
+
+#### Create or update an identity
+
+```js
+const identityData = {
+  source_service: 'email_service',
+  source_id: 'john.doe@example.com',
+  name: 'John Doe',
+  metadata: {
+    department: 'Engineering',
+    title: 'Senior Developer',
+    location: 'San Francisco'
+  }
+};
+
+api.identities.createOrUpdateIdentity(identityData)
+  .then(response => {
+    console.log('Identity created/updated:', response);
+  })
+  .catch(err => {
+    console.error('Error creating/updating identity:', err.message);
+  });
+```
+
+#### Get an identity by ID
+
+```js
+api.identities.getIdentity('identity-id')
+  .then(identity => {
+    console.log('Identity:', identity);
+  })
+  .catch(err => {
+    console.error('Error fetching identity:', err.message);
+  });
+```
+
+#### Get an identity by source
+
+```js
+api.identities.getIdentityBySource('email_service', 'john.doe@example.com')
+  .then(identity => {
+    console.log('Identity:', identity);
+  })
+  .catch(err => {
+    console.error('Error fetching identity by source:', err.message);
+  });
+```
+
+#### List identities with filtering
+
+```js
+api.identities.getIdentities({
+  source_service: 'email_service',
+  name: 'John',
+  limit: 10,
+  offset: 0
+})
+  .then(response => {
+    console.log('Identities:', response.identities);
+  })
+  .catch(err => {
+    console.error('Error listing identities:', err.message);
+  });
+```
+
+#### Delete an identity
+
+```js
+api.identities.deleteIdentity('identity-id')
+  .then(response => {
+    console.log('Identity deleted:', response);
+  })
+  .catch(err => {
+    console.error('Error deleting identity:', err.message);
+  });
+```
+
+### Identity Integration with Notifications
+
+When you create a notification with a `sender_id` that matches an identity's `source_id` (with the same `source_service`), the notification will include the identity information:
+
+```js
+// After creating an identity with:
+// source_service: 'email_service', source_id: 'john.doe@example.com'
+
+// Create a notification with the same source
+const notificationData = {
+  source_service: 'email_service',
+  sender_id: 'john.doe@example.com',
+  content: 'Notification with identity integration',
+  metadata: { category: 'example' }
+};
+
+api.notifications.createNotification(notificationData)
+  .then(response => {
+    // Fetch the notification to see the linked identity
+    return api.notifications.getNotification(response.id);
+  })
+  .then(notification => {
+    // The notification should include identity information
+    console.log('Notification sender identity:', notification.identity);
+  });
+```
+
 ### WebSocket Notification System
 
 Connect to the WebSocket notification system for real-time updates:
