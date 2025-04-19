@@ -12,11 +12,10 @@
     "test:integration": "mocha 'test/integration.test.js'",
     "test:coverage": "nyc --reporter=lcov --reporter=text mocha",
     "test:real-api": "node test/real-api.test.js",
-    "prepublishOnly": "echo \"Publishing package to GitHub Packages...\""
+    "prepublishOnly": "echo \"Publishing package to npm...\""
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   },
   "keywords": [
     "api",
