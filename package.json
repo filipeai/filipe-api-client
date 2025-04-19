@@ -1,8 +1,9 @@
 {
   "name": "@filipeai/client",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Node.js client library for Filipe API",
   "main": "lib/index.js",
+  "types": "index.d.ts",
   "browser": {
     "ws": false
   },
@@ -34,7 +35,8 @@
   },
   "homepage": "https://github.com/filipeai/filipe-api-client#readme",
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=14.0.0"
